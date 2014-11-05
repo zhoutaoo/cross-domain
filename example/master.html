@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>测试页面</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="../src/cross-domain.js"></script>
+</head>
+<body>
+	测试页面MASTER
+	<button onclick="sendMesg1()">发送消息Slave1</button>
+	<button onclick="sendMesg2()">发送消息Slave2</button>
+	<br/>
+	<iframe src="http://127.0.0.1/cross-domain/example/slave1.html" name="SLAVE1" id="SLAVE1"></iframe>
+	<iframe src="http://127.0.0.1/cross-domain/example/slave2.html" name="SLAVE2" id="SLAVE2"></iframe>
+	<div id="content"></div>
+</body>
+
+<script type="text/javascript">
+	function sendMesg1 (argument) {
+		CD.send("SLAVE1" , "changeSlave1" ,{info : "MASTER --->现在时间：" + new Date()});
+	}
+	function sendMesg2 (argument) {
+		CD.send("SLAVE2" , "changeSlave2" ,{info : "MASTER --->现在时间：" + new Date()});
+	}
+	CD.extends("changeMaster" , function(data){
+		console.info("master is call");
+		var content = document.getElementById("content");
+		content.innerHTML += "<br/>" + data.info;
+	});
+	console.log(CD);
+	//CD.send("C1","register",data,function(){
+
+	//});
+</script>
+</html>

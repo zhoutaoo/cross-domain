@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>c11</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="../src/cross-domain.js"></script>
+</head>
+<body>
+	<div id="main">
+		我是salve1 frame
+		<button onclick="sendMesg()">发送消息</button>
+	</div>
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+	function sendMesg (argument) {
+		CD.send("MESTER" , "changeMaster" ,{info : "Slave1 --->现在时间：" + new Date()});
+	}
+	CD.extends("changeSlave1" , function(data){
+		console.info("Slave1 changeSlave1 is call");
+		var content = document.getElementById("content");
+		content.innerHTML += "<br/>" + data.info;
+	});
+	console.log(CD);
+</script>
+
+</html>
