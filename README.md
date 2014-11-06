@@ -24,6 +24,6 @@ The MIT License (MIT)
 
 Copyright (c) 2014 FreeLanderEden
 # Communication
-* 微信：zhoutaoo
-* 微博：@zhoutaoo
-* 邮件：zhoutaoo@foxmail.com
+* WeChat：zhoutaoo
+* WeiBo：@zhoutaoo
+* EMail：zhoutaoo@foxmail.com
