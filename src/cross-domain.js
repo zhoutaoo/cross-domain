@@ -36,25 +36,25 @@
 		* Salve将自身组件注册到MASTER端
 		*/
 		register : function(){
-			this.send("MASTER" , "register" ,{info:"i'm coming register!", component:this.component});			
+			this.send("MASTER" , "register" ,{info:"i'm coming register!", component:this.component});
 		},
 		/**
 		* 扩展接口方法
 		* @param {String} name接口名称
-		* @param {Function} fun 接口方法 
+		* @param {Function} fun 接口方法
 		*/
 		extends : function(name,fun){
 			this.interfaces[name] = fun;
 		},
 		/**
-		 * 打印跨域日志的方法
-		 *
-		 * @param {Object} mesg 要打印跨域消息的内容
-		 */
+		* 打印跨域日志的方法
+	  *
+	  * @param {Object} mesg 要打印跨域消息的内容
+	  */
 		 log : function( mesg){
 		 	if (!window.console || typeof window.console === 'undefined')
 		 		return;
-		 	window.console.log("["+new Date()+"]["+this.version+"]["+this.component.type+"]["+this.component.name+"]["+mesg.type+"][" + window.JSON.stringify(mesg)+"]");		
+		 	window.console.log("["+new Date()+"]["+this.version+"]["+this.component.type+"]["+this.component.name+"]["+mesg.type+"][" + window.JSON.stringify(mesg)+"]");
 		 },
 		 /**
 		 * 发送信息到其它组件 - html5原生态方法包装
@@ -70,19 +70,23 @@
 		 /**
 		 * 发送消息方法
 		 * @param {String} componentName组件名称
-	     * @param {String} method接口名称
-         * @param {Object} data数据
-	     * @param {Function} callback回调
-	     */
-		 send : function(componentName,method,data,callback){
-			if(this.isMaster() && componentName ==="MASTER") 
-				return; 
+	   * @param {String} method接口名称
+     * @param {Object} data数据
+	   * @param {Function} callback回调
+     */
+		 send : function(componentName,method,data,callback,type){
+			if(this.isMaster() && componentName ==="MASTER")
+				return;
+			var source = this.component.name;
 			var mesg = {
+				source : source,
+				target : componentName,
 				method : method,
 				data : data,
-				callback : callback,
-				type : "REQ"
+				type : type || "REQUEST"
 			};
+			if(callback)
+				this.extends(method+"Callback" , callback) ;
 			var w = this.isMaster()? window.document[componentName] : window.top;
 			var host = this.isMaster()? this.components[componentName].host : "*";
 			//console.info(host);
@@ -95,8 +99,12 @@
 		 */
 		 process : function(event) {
 		 	var mesg = JSON.parse(event.data);
+		 	//console.log(event);
 		 	this.log(mesg);
-		 	this.interfaces[mesg.method].call(this,mesg.data);
+			var result = this.interfaces[mesg.method].call(this,mesg.data);
+			if(result){
+				this.send(mesg.source, mesg.method + "Callback", result,null,"RETURN");
+			}
 		 },
 		 /**
 		 * 绑定窗口事件，用于监听跨域事件

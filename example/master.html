@@ -17,16 +17,22 @@
 
 <script type="text/javascript">
 	function sendMesg1 (argument) {
-		CD.send("SLAVE1" , "changeSlave1" ,{info : "MASTER --->现在时间：" + new Date()});
+		CD.send("SLAVE1" , "changeSlave1" ,{info : "MASTER --->现在时间：" + new Date()},function(data){
+			console.log("callback fire");
+			writeHtml(data);
+		});
 	}
 	function sendMesg2 (argument) {
 		CD.send("SLAVE2" , "changeSlave2" ,{info : "MASTER --->现在时间：" + new Date()});
 	}
 	CD.extends("changeMaster" , function(data){
 		console.info("master is call");
-		var content = document.getElementById("content");
-		content.innerHTML += "<br/>" + data.info;
+		writeHtml(data.info);
 	});
+	function writeHtml(text){
+		var content = document.getElementById("content");
+		content.innerHTML += "<br/>" + text;
+	}
 	console.log(CD);
 	//CD.send("C1","register",data,function(){
 
