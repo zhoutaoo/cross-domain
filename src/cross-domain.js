@@ -101,9 +101,15 @@
 		 	var mesg = JSON.parse(event.data);
 		 	//console.log(event);
 		 	this.log(mesg);
-			var result = this.interfaces[mesg.method].call(this,mesg.data);
+			var interface = this.interfaces[mesg.method];
+			var result ;
+			if(interface){
+			  result = interface.call(this,mesg.data);
+			}else{
+				throw new Error("["+this.component.name+"] not have interface:[" + mesg.method + "]");
+			}
 			if(result){
-				this.send(mesg.source, mesg.method + "Callback", result,null,"RETURN");
+				this.send(mesg.source, mesg.method + "Callback", result, null,"RETURN");
 			}
 		 },
 		 /**

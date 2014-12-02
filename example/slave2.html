@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>c12</title>
+	<title>slave2</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script type="text/javascript" src="../src/cross-domain.js"></script>
 </head>
 <body>
 	<div id="main">
-		我是c2 frame
-		<button onclick="sendMesg()">发送消息</button>
+		I am slave2 frame
+		<button onclick="sendMesg()">send data</button>
 	</div>
 	<div id="content"></div>
 
 </body>
 <script type="text/javascript">
+	var me = CD.component.name;
+	function genInfo(name){
+		return {info : "Hello [" + name + "] , I am [" + me + "] Now at " + new Date()};
+	}
 	function sendMesg (argument) {
-		CD.send("MESTER" , "changeMaster" ,{info : "Slave2 --->现在时间：" + new Date()});
+		CD.send("MESTER" , "changeMaster" ,genInfo("MESTER"));
 	}
 	CD.extends("changeSlave2" , function(data){
-		console.info("Slave2 changeSlave2 is call");
-		var content = document.getElementById("content");
-		content.innerHTML += "<br/>" + data.info;
+		writeHtml(data.info);
 	});
+	function writeHtml(text){
+		var content = document.getElementById("content");
+		content.innerHTML += "<br/>" + text;
+	}
 	console.log(CD);
 </script>
 </html>
