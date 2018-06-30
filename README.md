@@ -8,6 +8,8 @@ cross-domain
 # 介绍
 ## 示意图
 ![image](https://raw.githubusercontent.com/FreeLanderEden/cross-domain/master/example/principle.jpg)
+## 简介与使用
+请参考 [简介与使用](https://segmentfault.com/a/1190000015435530)
 # Feature
 ## 组件自动注册机制
 页面及js加载完成后自动发送配置信息到master端进行注册，master接收到消息后将组件存储相关信息，无需手工进行任何初使化操作。
