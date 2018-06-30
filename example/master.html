@@ -1,46 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Test Page</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="../src/cross-domain.js"></script>
+    <title>Test Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript" src="../src/cross-domain.js"></script>
 </head>
 <body>
-	Test Page MASTER
-	<button onclick="sendMesg1()">send data to Slave1</button>
-	<button onclick="sendMesg2()">send data to Slave2</button>
-	<br/>
-	<iframe src="http://127.0.0.1/cross-domain/example/slave1.html" name="SLAVE1" id="SLAVE1"></iframe>
-	<iframe src="http://127.0.0.1/cross-domain/example/slave2.html" name="SLAVE2" id="SLAVE2"></iframe>
-	<div id="content"></div>
+Test Page MASTER
+<button onclick="sendMesg1()">send data to Slave1</button>
+<button onclick="sendMesg2()">send data to Slave2</button>
+<br/>
+<iframe src="http://127.0.0.1:8080/cross-domain/example/slave1.html" name="SLAVE1" id="SLAVE1"></iframe>
+<iframe src="http://127.0.0.1:8080/cross-domain/example/slave2.html" name="SLAVE2" id="SLAVE2"></iframe>
+<div id="content"></div>
 </body>
 
 <script type="text/javascript">
-	var me = CD.component.name;
-	function genInfo(name){
-		return {info : "Hello [" + name + "] , I am [" + me + "] Now at " + new Date()};
-	}
+    var me = CD.component.name;
+    function genInfo(name) {
+        return {info: "Hello [" + name + "] , I am [" + me + "] Now at " + new Date()};
+    }
 
-	function sendMesg1 (argument) {
-		CD.send("SLAVE1" , "changeSlave1" ,genInfo("SLAVE1") ,function(data){
-			console.log("callback fire");
-			writeHtml(data);
-		});
-	}
+    //调用SLAVE1的changeSlave1前端接口，接口参数为genInfo("SLAVE1")
+    function sendMesg1(argument) {
+        CD.send("SLAVE1", "changeSlave1", genInfo("SLAVE1"), function (data) {
+            console.log("callback fire");
+            writeHtml(data);
+        });
+    }
 
-	function sendMesg2 (argument) {
-		CD.send("SLAVE2" , "changeSlave2" , genInfo("SLAVE2"));
-	}
+    //调用SLAVE2的changeSlave2前端接口，接口参数为genInfo("SLAVE2")
+    function sendMesg2(argument) {
+        CD.send("SLAVE2", "changeSlave2", genInfo("SLAVE2"));
+    }
 
-	CD.extends("changeMaster" , function(data){
-		writeHtml(data.info);
-	});
-
-	function writeHtml(text){
-		var content = document.getElementById("content");
-		content.innerHTML += "<br/>" + text;
-	}
-	console.log(CD);
-
+    //MASTER开放能SLAVE1和SLAVE2的JS接口
+    CD.extends("changeMaster", function (data) {
+        writeHtml(data.info);
+    });
+    function writeHtml(text) {
+        var content = document.getElementById("content");
+        content.innerHTML += "<br/>" + text;
+    }
+    console.log(CD);
 </script>
 </html>

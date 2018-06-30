@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>slave2</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="../src/cross-domain.js"></script>
+    <title>slave2</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript" src="../src/cross-domain.js"></script>
 </head>
 <body>
-	<div id="main">
-		I am slave2 frame
-		<button onclick="sendMesg()">send data</button>
-	</div>
-	<div id="content"></div>
+<div id="main">
+    I am slave2 frame
+    <button onclick="sendMesg()">send data to MASTER</button>
+</div>
+<div id="content"></div>
 
 </body>
 <script type="text/javascript">
-	var me = CD.component.name;
-	function genInfo(name){
-		return {info : "Hello [" + name + "] , I am [" + me + "] Now at " + new Date()};
-	}
-	function sendMesg (argument) {
-		CD.send("MESTER" , "changeMaster" ,genInfo("MESTER"));
-	}
-	CD.extends("changeSlave2" , function(data){
-		writeHtml(data.info);
-	});
-	function writeHtml(text){
-		var content = document.getElementById("content");
-		content.innerHTML += "<br/>" + text;
-	}
-	console.log(CD);
+    var me = CD.component.name;
+    function genInfo(name) {
+        return {info: "Hello [" + name + "] , I am [" + me + "] Now at " + new Date()};
+    }
+
+    //调用MASTER的changeMaster接口，数据参数是genInfo("MASTER")
+    function sendMesg(argument) {
+        CD.send("MESTER", "changeMaster", genInfo("MASTER"));
+    }
+
+    //提供给其它iframe的接口，接口名changeSlave1
+    CD.extends("changeSlave2", function (data) {
+        writeHtml(data.info);
+    });
+    function writeHtml(text) {
+        var content = document.getElementById("content");
+        content.innerHTML += "<br/>" + text;
+    }
+    console.log(CD);
 </script>
 </html>
